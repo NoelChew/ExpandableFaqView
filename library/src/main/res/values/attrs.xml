@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="expandableFaqView">
+        <attr name="animDuration" format="integer"/>
+        <attr name="questionText" format="string"/>
+        <attr name="answerText" format="string"/>
+        <attr name="questionUnderlined" format="boolean"/>
+        <attr name="answerUnderlined" format="boolean"/>
+        <attr name="questionTextSizeSp" format="float"/>
+        <attr name="answerTextSizeSp" format="float"/>
+        <attr name="questionTextColor" format="color"/>
+        <attr name="answerTextColor" format="color"/>
+        <attr name="questionBackgroundDrawable" format="reference"/>
+        <attr name="answerBackgroundDrawable" format="reference"/>
+        <attr name="expandDrawable" format="reference"/>
+        <attr name="collapseDrawable" format="reference"/>
+    </declare-styleable>
+</resources>
