@@ -17,9 +17,10 @@
         </activity>
 
         <activity android:name=".NonListExampleActivity" />
-        <activity android:name=".ListViewExampleActivity" />
-        <activity android:name=".RecyclerViewExampleActivity" />
-        <activity android:name=".FaqRecyclerViewExampleActivity" />
+        <activity android:name=".ui.listview.FaqListViewExampleActivity" />
+        <activity android:name=".ui.listview.CustomListViewExampleActivity" />
+        <activity android:name=".ui.recyclerview.FaqRecyclerViewExampleActivity" />
+        <activity android:name=".ui.recyclerview.CustomRecyclerViewExampleActivity" />
     </application>
 
 </manifest>

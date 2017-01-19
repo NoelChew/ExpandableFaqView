@@ -7,11 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.noelchew.expandablefaqview.ui.listview.CustomListViewExampleActivity;
+import com.noelchew.expandablefaqview.ui.listview.FaqListViewExampleActivity;
+import com.noelchew.expandablefaqview.ui.recyclerview.CustomRecyclerViewExampleActivity;
+import com.noelchew.expandablefaqview.ui.recyclerview.FaqRecyclerViewExampleActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     Context context;
 
-    Button btnNonListExample, btnListViewExample, btnRecyclerViewExample, btnCustomRecyclerViewExample;
+    Button btnNonListExample, btnFaqListViewExample, btnCustomListViewExample, btnFaqRecyclerViewExample, btnCustomRecyclerViewExample;
 
 
     @Override
@@ -21,8 +26,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnNonListExample = (Button) findViewById(R.id.button_non_list_example);
-        btnListViewExample = (Button) findViewById(R.id.button_list_view_example);
-        btnRecyclerViewExample = (Button) findViewById(R.id.button_recycler_view_example);
+        btnFaqListViewExample = (Button) findViewById(R.id.button_faq_list_view_example);
+        btnCustomListViewExample = (Button) findViewById(R.id.button_custom_list_view_example);
+        btnFaqRecyclerViewExample = (Button) findViewById(R.id.button_faq_recycler_view_example);
         btnCustomRecyclerViewExample = (Button) findViewById(R.id.button_custom_recycler_view_example);
 
         btnNonListExample.setOnClickListener(new View.OnClickListener() {
@@ -32,14 +38,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnListViewExample.setOnClickListener(new View.OnClickListener() {
+        btnFaqListViewExample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, ListViewExampleActivity.class));
+                startActivity(new Intent(context, FaqListViewExampleActivity.class));
             }
         });
 
-        btnRecyclerViewExample.setOnClickListener(new View.OnClickListener() {
+        btnCustomListViewExample.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, CustomListViewExampleActivity.class));
+            }
+        });
+
+        btnFaqRecyclerViewExample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(context, FaqRecyclerViewExampleActivity.class));
@@ -49,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         btnCustomRecyclerViewExample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, RecyclerViewExampleActivity.class));
+                startActivity(new Intent(context, CustomRecyclerViewExampleActivity.class));
             }
         });
     }

@@ -15,11 +15,12 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.util.SparseIntArray;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -75,9 +76,12 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
 
     /* For saving collapsed status when used in ListView */
     private SparseBooleanArray mCollapsedStatus;
-    private int mPosition;
+    private SparseIntArray mExpandableHeight;
+    private int mPosition = -1;
 
     private int answerHeight;
+
+    private FaqEventListener faqEventListener;
 
     public ExpandableFaqView(Context context) {
         this(context, null);
@@ -102,8 +106,8 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
         mAnimationDuration = typedArray.getInt(R.styleable.expandableFaqView_animDuration, DEFAULT_ANIM_DURATION);
         mQuestionUnderlined = typedArray.getBoolean(R.styleable.expandableFaqView_questionUnderlined, false);
         mAnswerUnderlined = typedArray.getBoolean(R.styleable.expandableFaqView_answerUnderlined, false);
-        mQuestionTextSize = typedArray.getDimension(R.styleable.expandableFaqView_questionTextSize, DEFAULT_TEXT_SIZE);
-        mAnswerTextSize = typedArray.getDimension(R.styleable.expandableFaqView_answerTextSize, DEFAULT_TEXT_SIZE);
+        mQuestionTextSize = typedArray.getDimensionPixelSize(R.styleable.expandableFaqView_questionTextSize, 0);
+        mAnswerTextSize = typedArray.getDimensionPixelSize(R.styleable.expandableFaqView_answerTextSize, 0);
         mQuestionTextColor = typedArray.getColorStateList(R.styleable.expandableFaqView_questionTextColor);
         mAnswerTextColor = typedArray.getColorStateList(R.styleable.expandableFaqView_answerTextColor);
         mQuestionBackgroundDrawable = typedArray.getDrawable(R.styleable.expandableFaqView_questionBackgroundDrawable);
@@ -129,11 +133,16 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
         rlAnswerBg = (RelativeLayout) findViewById(R.id.relative_layout_answer);
         tvQuestion = (TextView) findViewById(R.id.question_text);
         tvAnswer = (TextView) findViewById(R.id.answer_text);
-        tvQuestion.setOnClickListener(this);
-        tvAnswer.setOnClickListener(this);
+        rlQuestionBg.setOnClickListener(this);
+        rlAnswerBg.setOnClickListener(this);
 
-        tvQuestion.setTextSize(mQuestionTextSize);
-        tvAnswer.setTextSize(mAnswerTextSize);
+        if (mQuestionTextSize > 0) {
+            tvQuestion.setTextSize(TypedValue.COMPLEX_UNIT_PX, mQuestionTextSize);
+        }
+
+        if (mAnswerTextSize > 0) {
+            tvAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PX, mAnswerTextSize);
+        }
 
         if (mQuestionTextColor != null) {
             tvQuestion.setTextColor(mQuestionTextColor);
@@ -182,26 +191,27 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
                         Log.d(TAG, "onGlobalLayout for: " + mQuestionText);
                         Log.d(TAG, "onGlobalLayout mCollapsed: " + mCollapsed);
                         answerHeight = getAnswerTextViewHeight();
+                        if (mExpandableHeight != null && mPosition >= 0) {
+                            mExpandableHeight.put(mPosition, answerHeight);
+                        }
 
                         Log.d(TAG, "onGlobalLayout answerHeight: " + answerHeight);
 
                         rlAnswerBg.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                         if (mCollapsed) {
-//                            rlAnswerBg.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    rlAnswerBg.getLayoutParams().height = 0;
-//                                }
-//                            });
-                            rlAnswerBg.setVisibility(View.GONE);
+                            rlAnswerBg.getLayoutParams().height = 0;
                         } else {
-                            rlAnswerBg.setVisibility(View.VISIBLE);
+                            rlAnswerBg.getLayoutParams().height = answerHeight;
                         }
                     }
 
                 });
 
+    }
+
+    public void setFaqEventListener(FaqEventListener faqEventListener) {
+        this.faqEventListener = faqEventListener;
     }
 
     @Override
@@ -210,23 +220,24 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
         mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
         if (mCollapsed) {
             if (!mAnimating) {
-                rlAnswerBg.setVisibility(View.GONE);
+                rlAnswerBg.getLayoutParams().height = 0;
             }
         } else {
-            rlAnswerBg.setVisibility(View.VISIBLE);
+            if (!mAnimating) {
+                if (mExpandableHeight != null && mPosition >= 0) {
+                    rlAnswerBg.getLayoutParams().height = mExpandableHeight.get(mPosition);
+                }
+            }
         }
 
-        if (mRelayout) {
-            mRelayout = false;
-        }
+//        if (mRelayout) {
+//            mRelayout = false;
+//
+//        }
     }
 
     @Override
     public void onClick(View view) {
-//        if (mButton.getVisibility() != View.VISIBLE) {
-//            return;
-//        }
-
         mCollapsed = !mCollapsed;
         mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
 
@@ -266,7 +277,6 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
         } else {
             tvQuestion.setText(text);
         }
-        setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
     }
 
     public void setAnswer(@Nullable CharSequence text) {
@@ -279,11 +289,11 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
         } else {
             tvAnswer.setText(text);
         }
-        setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
     }
 
-    public void setQuestion(@Nullable CharSequence text, @NonNull SparseBooleanArray collapsedStatus, int position) {
+    public void setQuestion(@Nullable CharSequence text, @NonNull SparseBooleanArray collapsedStatus, @NonNull SparseIntArray expandableHeight, final int position) {
         mCollapsedStatus = collapsedStatus;
+        mExpandableHeight = expandableHeight;
         mPosition = position;
         boolean isCollapsed = collapsedStatus.get(position, true);
         clearAnimation();
@@ -291,29 +301,28 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
         mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
         mQuestionText = text.toString();
         setQuestion(text);
-//        getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-//        requestLayout();
 
         rlAnswerBg.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        if (rlAnswerBg.getVisibility() != GONE) {
-                            answerHeight = getAnswerTextViewHeight();
-                        }
+                        answerHeight = getAnswerTextViewHeight();
+                        mExpandableHeight.put(position, answerHeight);
+//                        }
                         rlAnswerBg.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                         if (mCollapsed) {
-                            rlAnswerBg.setVisibility(View.GONE);
+                            rlAnswerBg.getLayoutParams().height = 0;
                         } else {
-                            rlAnswerBg.setVisibility(View.VISIBLE);
+                            rlAnswerBg.getLayoutParams().height = answerHeight;
                         }
                     }
                 });
     }
 
-    public void setAnswer(@Nullable CharSequence text, @NonNull SparseBooleanArray collapsedStatus, int position) {
+    public void setAnswer(@Nullable CharSequence text, @NonNull SparseBooleanArray collapsedStatus, @NonNull SparseIntArray expandableHeight, final int position) {
         mCollapsedStatus = collapsedStatus;
+        mExpandableHeight = expandableHeight;
         mPosition = position;
         boolean isCollapsed = collapsedStatus.get(position, true);
         clearAnimation();
@@ -321,22 +330,20 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
         mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
         mQuestionText = text.toString();
         setAnswer(text);
-//        getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-//        requestLayout();
 
         rlAnswerBg.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        if (rlAnswerBg.getVisibility() != GONE) {
-                            answerHeight = getAnswerTextViewHeight();
-                        }
+                        answerHeight = getAnswerTextViewHeight();
+                        mExpandableHeight.put(position, answerHeight);
+//                        }
                         rlAnswerBg.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                         if (mCollapsed) {
-                            rlAnswerBg.setVisibility(View.GONE);
+                            rlAnswerBg.getLayoutParams().height = 0;
                         } else {
-                            rlAnswerBg.setVisibility(View.VISIBLE);
+                            rlAnswerBg.getLayoutParams().height = answerHeight;
                         }
                     }
                 });
@@ -374,6 +381,16 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
     public void setAnswerTextSize(int unit, float textSize) {
         mAnswerTextSize = textSize;
         tvAnswer.setTextSize(unit, mAnswerTextSize);
+    }
+
+    public void setQuestionTextSize(float textSize) {
+        mQuestionTextSize = textSize;
+        tvQuestion.setTextSize(TypedValue.COMPLEX_UNIT_SP, mQuestionTextSize);
+    }
+
+    public void setAnswerTextSize(float textSize) {
+        mAnswerTextSize = textSize;
+        tvAnswer.setTextSize(TypedValue.COMPLEX_UNIT_SP, mAnswerTextSize);
     }
 
     public void setQuestionTextColor(@ColorRes int colorRes) {
@@ -448,26 +465,30 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
     }
 
     private int getAnswerTextViewHeight() {
-        boolean gone = rlAnswerBg.getVisibility() == View.GONE;
-        if (gone) {
-            rlAnswerBg.setVisibility(VISIBLE);
-        }
+//        boolean gone = rlAnswerBg.getVisibility() == View.GONE;
+//        if (gone) {
+//            rlAnswerBg.setVisibility(VISIBLE);
+//        }
         int textHeight = tvAnswer.getLayout().getLineTop(tvAnswer.getLineCount());
         int padding = tvAnswer.getCompoundPaddingTop() + tvAnswer.getCompoundPaddingBottom();
-        if (gone) {
-            rlAnswerBg.setVisibility(GONE);
-        }
+//        if (gone) {
+//            rlAnswerBg.setVisibility(GONE);
+//        }
         return textHeight + padding;
     }
 
     private void showAnswer() {
-        if (answerHeight == 0) {
-            rlAnswerBg.setVisibility(VISIBLE);
-            answerHeight = getAnswerTextViewHeight();
-            expand(rlAnswerBg, mAnimationDuration, answerHeight);
+//        if (answerHeight == 0) {
+//            rlAnswerBg.setVisibility(VISIBLE);
+        if (mExpandableHeight != null && mPosition > -1) {
+            answerHeight = mExpandableHeight.get(mPosition);
         } else {
-            expand(rlAnswerBg, mAnimationDuration, answerHeight);
+            answerHeight = getAnswerTextViewHeight();
         }
+        expand(rlAnswerBg, mAnimationDuration, answerHeight);
+//        } else {
+//            expand(rlAnswerBg, mAnimationDuration, answerHeight);
+//        }
     }
 
     private void hideAnswer() {
@@ -496,6 +517,9 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
             @Override
             public void onAnimationEnd(Animator animator) {
                 mAnimating = false;
+                if (faqEventListener != null && mPosition >= 0) {
+                    faqEventListener.onAnswerExpanded(mPosition, mAnimationDuration);
+                }
             }
 
             @Override
@@ -549,5 +573,9 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
         valueAnimator.setInterpolator(new AnticipateInterpolator());
         valueAnimator.setDuration(duration);
         valueAnimator.start();
+    }
+
+    public interface FaqEventListener {
+        void onAnswerExpanded(int position, int animationDuration);
     }
 }

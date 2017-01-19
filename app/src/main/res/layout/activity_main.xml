@@ -15,25 +15,34 @@
         android:layout_margin="8dp"
         android:padding="8dp"
         android:text="@string/non_list_example_title"
-        android:textSize="20dp" />
+        android:textSize="18dp" />
 
     <Button
-        android:id="@+id/button_list_view_example"
+        android:id="@+id/button_faq_list_view_example"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:padding="8dp"
-        android:text="@string/list_view_example_title"
-        android:textSize="20dp" />
+        android:text="@string/faq_list_view_example_title"
+        android:textSize="18dp" />
 
     <Button
-        android:id="@+id/button_recycler_view_example"
+        android:id="@+id/button_custom_list_view_example"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:padding="8dp"
-        android:text="@string/recycler_view_example_title"
-        android:textSize="20dp" />
+        android:text="@string/custom_list_view_example_title"
+        android:textSize="18dp" />
+
+    <Button
+        android:id="@+id/button_faq_recycler_view_example"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:text="@string/faq_recycler_view_example_title"
+        android:textSize="18dp" />
 
     <Button
         android:id="@+id/button_custom_recycler_view_example"
@@ -42,6 +51,6 @@
         android:layout_margin="8dp"
         android:padding="8dp"
         android:text="@string/custom_recycler_view_example_title"
-        android:textSize="20dp" />
+        android:textSize="18dp" />
 
 </LinearLayout>
