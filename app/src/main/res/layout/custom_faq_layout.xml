@@ -6,6 +6,10 @@
     <com.noelchew.library.ExpandableFaqView
         xmlns:expandableFaqView="http://schemas.android.com/apk/res-auto"
         android:id="@+id/expandable_faq_view"
+        expandableFaqView:questionTextSize="20sp"
+        expandableFaqView:answerTextSize="16sp"
+        expandableFaqView:questionUnderlined="true"
+        expandableFaqView:animDuration="500"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

@@ -1,4 +1,4 @@
-package com.noelchew.expandablefaqview;
+package com.noelchew.expandablefaqview.ui.recyclerview;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,10 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
 
+import com.noelchew.expandablefaqview.R;
 import com.noelchew.expandablefaqview.data.DummyData;
 import com.noelchew.library.model.FaqObject;
-import com.noelchew.library.recyclerview.FaqRecyclerViewAdapter;
 import com.noelchew.library.recyclerview.FaqRecyclerView;
+import com.noelchew.library.recyclerview.FaqRecyclerViewAdapter;
 
 import java.util.ArrayList;
 
@@ -32,15 +33,13 @@ public class FaqRecyclerViewExampleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faq_recycler_view_example);
         context = this;
+        faqObjectsArrayList = DummyData.getDummyData();
 
         faqRecyclerView = (FaqRecyclerView) findViewById(R.id.faq_recycler_view);
         faqRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-        faqObjectsArrayList = DummyData.getDummyData();
-
         faqRecyclerView.setAdapter(new FaqRecyclerViewAdapter(faqObjectsArrayList));
 
-        getSupportActionBar().setTitle(R.string.recycler_view_example_title);
+        getSupportActionBar().setTitle(R.string.faq_recycler_view_example_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
