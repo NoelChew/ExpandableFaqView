@@ -15,17 +15,17 @@ import java.util.ArrayList;
  * Created by noelchew on 17/01/2017.
  */
 
-public class FaqAdapter extends RecyclerView.Adapter<FaqRecyclerViewHolder> {
+public class FaqRecyclerViewAdapter extends RecyclerView.Adapter<FaqRecyclerViewHolder> {
     private final SparseBooleanArray mCollapsedStatus;
     protected ArrayList<FaqObject> faqObjectArrayList;
     int layoutId;
 
-    public FaqAdapter(ArrayList<FaqObject> faqObjectArrayList) {
+    public FaqRecyclerViewAdapter(ArrayList<FaqObject> faqObjectArrayList) {
         this.faqObjectArrayList = faqObjectArrayList;
         mCollapsedStatus = new SparseBooleanArray();
     }
 
-    public FaqAdapter(int layoutId, ArrayList<FaqObject> faqObjectArrayList) {
+    public FaqRecyclerViewAdapter(int layoutId, ArrayList<FaqObject> faqObjectArrayList) {
         this.faqObjectArrayList = faqObjectArrayList;
         mCollapsedStatus = new SparseBooleanArray();
         this.layoutId = layoutId;

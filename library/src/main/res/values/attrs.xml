@@ -6,8 +6,8 @@
         <attr name="answerText" format="string"/>
         <attr name="questionUnderlined" format="boolean"/>
         <attr name="answerUnderlined" format="boolean"/>
-        <attr name="questionTextSizeSp" format="float"/>
-        <attr name="answerTextSizeSp" format="float"/>
+        <attr name="questionTextSize" format="dimension"/>
+        <attr name="answerTextSize" format="dimension"/>
         <attr name="questionTextColor" format="color"/>
         <attr name="answerTextColor" format="color"/>
         <attr name="questionBackgroundDrawable" format="reference"/>

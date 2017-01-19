@@ -1,54 +1,57 @@
 package com.noelchew.expandablefaqview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-
-import com.noelchew.expandablefaqview.data.DummyData;
-import com.noelchew.library.ExpandableFaqView;
-import com.noelchew.library.model.FaqObject;
-import com.noelchew.library.recyclerview.FaqRecyclerView;
-
-import java.util.ArrayList;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
     Context context;
-    ExpandableFaqView expandableFaqView, expandableFaqView2;
 
-    ArrayList<FaqObject> faqObjectArrayList;
+    Button btnNonListExample, btnListViewExample, btnRecyclerViewExample, btnCustomRecyclerViewExample;
 
-    FaqRecyclerView recyclerView;
-    CustomFaqAdapter adapter;
-//    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(R.layout.activity_main);
-        expandableFaqView = (ExpandableFaqView) findViewById(R.id.expandable_faq_view_1);
 
-        expandableFaqView2 = (ExpandableFaqView) findViewById(R.id.expandable_faq_view_2);
-        expandableFaqView2.setQuestionBackgroundColor(android.R.color.holo_blue_bright);
-        expandableFaqView2.setAnswerBackgroundColor(android.R.color.holo_green_light);
-        expandableFaqView2.setQuestionTextColor(R.color.colorPrimary);
-        expandableFaqView2.setAnswerTextColor(R.color.colorAccent);
-        expandableFaqView2.setQuestion("Question 123123123");
-        expandableFaqView2.setAnswer("Answer 123\n123\n123");
-        expandableFaqView2.setQuestionUnderlined(true);
-        expandableFaqView2.setAnimationDuration(1000);
+        btnNonListExample = (Button) findViewById(R.id.button_non_list_example);
+        btnListViewExample = (Button) findViewById(R.id.button_list_view_example);
+        btnRecyclerViewExample = (Button) findViewById(R.id.button_recycler_view_example);
+        btnCustomRecyclerViewExample = (Button) findViewById(R.id.button_custom_recycler_view_example);
 
-        faqObjectArrayList = DummyData.getDummyData();
+        btnNonListExample.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, NonListExampleActivity.class));
+            }
+        });
 
-        adapter = new CustomFaqAdapter(faqObjectArrayList);
-        recyclerView = (FaqRecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(adapter);
+        btnListViewExample.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, ListViewExampleActivity.class));
+            }
+        });
 
-//        listView = (ListView) findViewById(R.id.list_view);
-//        listView.setAdapter(new FaqListViewAdapter(context, faqObjectArrayList));
+        btnRecyclerViewExample.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, FaqRecyclerViewExampleActivity.class));
+            }
+        });
+
+        btnCustomRecyclerViewExample.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, RecyclerViewExampleActivity.class));
+            }
+        });
     }
 
 }

@@ -1,46 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:expandableFaqView="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.noelchew.expandablefaqview.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary" />
-
-    <com.noelchew.library.ExpandableFaqView
-        android:id="@+id/expandable_faq_view_1"
+    <Button
+        android:id="@+id/button_non_list_example"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        expandableFaqView:answerBackgroundDrawable="@color/colorPrimaryDark"
-        expandableFaqView:answerText="Answer for\nQuestion 1\nabc 123."
-        expandableFaqView:answerTextColor="@color/colorAccent"
-        expandableFaqView:answerUnderlined="true"
-        expandableFaqView:questionBackgroundDrawable="@color/colorAccent"
-        expandableFaqView:questionText="Question 1" />
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:text="@string/non_list_example_title"
+        android:textSize="20dp" />
 
-    <com.noelchew.library.ExpandableFaqView
-        android:id="@+id/expandable_faq_view_2"
+    <Button
+        android:id="@+id/button_list_view_example"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/expandable_faq_view_1"
-        android:layout_marginTop="2dp" />
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:text="@string/list_view_example_title"
+        android:textSize="20dp" />
 
-    <com.noelchew.library.recyclerview.FaqRecyclerView
-    android:id="@+id/recycler_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_below="@+id/expandable_faq_view_2"></com.noelchew.library.recyclerview.FaqRecyclerView>
+    <Button
+        android:id="@+id/button_recycler_view_example"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:text="@string/recycler_view_example_title"
+        android:textSize="20dp" />
 
-    <!--<ListView-->
-        <!--android:id="@+id/list_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_below="@+id/expandable_faq_view_2"></ListView>-->
+    <Button
+        android:id="@+id/button_custom_recycler_view_example"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:text="@string/custom_recycler_view_example_title"
+        android:textSize="20dp" />
 
-</RelativeLayout>
+</LinearLayout>
