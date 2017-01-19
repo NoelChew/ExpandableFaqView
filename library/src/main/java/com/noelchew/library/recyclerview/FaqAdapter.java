@@ -17,11 +17,8 @@ import java.util.ArrayList;
 
 public class FaqAdapter extends RecyclerView.Adapter<FaqRecyclerViewHolder> {
     private final SparseBooleanArray mCollapsedStatus;
-    ArrayList<FaqObject> faqObjectArrayList;
+    protected ArrayList<FaqObject> faqObjectArrayList;
     int layoutId;
-
-
-
 
     public FaqAdapter(ArrayList<FaqObject> faqObjectArrayList) {
         this.faqObjectArrayList = faqObjectArrayList;
