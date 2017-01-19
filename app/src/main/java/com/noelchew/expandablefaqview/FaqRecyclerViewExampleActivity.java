@@ -4,12 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import com.noelchew.expandablefaqview.data.DummyData;
-import com.noelchew.library.listview.FaqListViewAdapter;
 import com.noelchew.library.model.FaqObject;
+import com.noelchew.library.recyclerview.FaqRecyclerViewAdapter;
+import com.noelchew.library.recyclerview.FaqRecyclerView;
 
 import java.util.ArrayList;
 
@@ -17,27 +18,29 @@ import java.util.ArrayList;
  * Created by noelchew on 19/01/2017.
  */
 
-public class ListViewExampleActivity extends AppCompatActivity {
+public class FaqRecyclerViewExampleActivity extends AppCompatActivity {
 
-    private static final String TAG = "ListViewExampleActivity";
+    private static final String TAG = "FaqRecyclerViewExampleActivity";
 
     Context context;
 
-    ListView listView;
+    FaqRecyclerView faqRecyclerView;
     ArrayList<FaqObject> faqObjectsArrayList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_view_example);
+        setContentView(R.layout.activity_faq_recycler_view_example);
         context = this;
 
-        listView = (ListView) findViewById(R.id.list_view);
+        faqRecyclerView = (FaqRecyclerView) findViewById(R.id.faq_recycler_view);
+        faqRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+
         faqObjectsArrayList = DummyData.getDummyData();
 
-        listView.setAdapter(new FaqListViewAdapter(context, faqObjectsArrayList));
+        faqRecyclerView.setAdapter(new FaqRecyclerViewAdapter(faqObjectsArrayList));
 
-        getSupportActionBar().setTitle(R.string.list_view_example_title);
+        getSupportActionBar().setTitle(R.string.recycler_view_example_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

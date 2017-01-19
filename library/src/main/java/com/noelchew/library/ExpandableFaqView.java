@@ -20,7 +20,6 @@ import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -43,7 +42,7 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
 
     private static final String TAG = ExpandableFaqView.class.getSimpleName();
 
-    private static final float DEFAULT_TEXT_SIZE_IN_SP = 20;
+    private static final float DEFAULT_TEXT_SIZE = 20;
 
     /* The default animation duration */
     private static final int DEFAULT_ANIM_DURATION = 250;
@@ -62,7 +61,9 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
 
     private boolean mQuestionUnderlined, mAnswerUnderlined;
 
-    private float mQuestionTextSizeInSp, mAnswerTextSizeInSp;
+    private
+    @Dimension
+    float mQuestionTextSize, mAnswerTextSize;
 
     private ColorStateList mQuestionTextColor, mAnswerTextColor;
 
@@ -101,8 +102,8 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
         mAnimationDuration = typedArray.getInt(R.styleable.expandableFaqView_animDuration, DEFAULT_ANIM_DURATION);
         mQuestionUnderlined = typedArray.getBoolean(R.styleable.expandableFaqView_questionUnderlined, false);
         mAnswerUnderlined = typedArray.getBoolean(R.styleable.expandableFaqView_answerUnderlined, false);
-        mQuestionTextSizeInSp = typedArray.getFloat(R.styleable.expandableFaqView_questionTextSizeSp, DEFAULT_TEXT_SIZE_IN_SP);
-        mAnswerTextSizeInSp = typedArray.getFloat(R.styleable.expandableFaqView_answerTextSizeSp, DEFAULT_TEXT_SIZE_IN_SP);
+        mQuestionTextSize = typedArray.getDimension(R.styleable.expandableFaqView_questionTextSize, DEFAULT_TEXT_SIZE);
+        mAnswerTextSize = typedArray.getDimension(R.styleable.expandableFaqView_answerTextSize, DEFAULT_TEXT_SIZE);
         mQuestionTextColor = typedArray.getColorStateList(R.styleable.expandableFaqView_questionTextColor);
         mAnswerTextColor = typedArray.getColorStateList(R.styleable.expandableFaqView_answerTextColor);
         mQuestionBackgroundDrawable = typedArray.getDrawable(R.styleable.expandableFaqView_questionBackgroundDrawable);
@@ -131,8 +132,8 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
         tvQuestion.setOnClickListener(this);
         tvAnswer.setOnClickListener(this);
 
-        tvQuestion.setTextSize(TypedValue.COMPLEX_UNIT_SP, mQuestionTextSizeInSp);
-        tvAnswer.setTextSize(TypedValue.COMPLEX_UNIT_SP, mAnswerTextSizeInSp);
+        tvQuestion.setTextSize(mQuestionTextSize);
+        tvAnswer.setTextSize(mAnswerTextSize);
 
         if (mQuestionTextColor != null) {
             tvQuestion.setTextColor(mQuestionTextColor);
@@ -258,14 +259,26 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
     public void setQuestion(@Nullable CharSequence text) {
         mRelayout = true;
         mQuestionText = text.toString();
-        tvQuestion.setText(text);
+        if (mQuestionUnderlined) {
+            SpannableString content = new SpannableString(text);
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            tvQuestion.setText(content);
+        } else {
+            tvQuestion.setText(text);
+        }
         setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
     }
 
     public void setAnswer(@Nullable CharSequence text) {
         mRelayout = true;
         mAnswerText = text.toString();
-        tvAnswer.setText(text);
+        if (mAnswerUnderlined) {
+            SpannableString content = new SpannableString(text);
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            tvAnswer.setText(content);
+        } else {
+            tvAnswer.setText(text);
+        }
         setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
     }
 
@@ -353,14 +366,14 @@ public class ExpandableFaqView extends FrameLayout implements View.OnClickListen
         rlAnswerBg.setBackgroundColor(getColor(getContext(), colorRes));
     }
 
-    public void setQuestionTextSizeInSp(@Dimension int textSizeInSp) {
-        mQuestionTextSizeInSp = textSizeInSp;
-        tvQuestion.setTextSize(TypedValue.COMPLEX_UNIT_SP, mQuestionTextSizeInSp);
+    public void setQuestionTextSize(int unit, float textSize) {
+        mQuestionTextSize = textSize;
+        tvQuestion.setTextSize(unit, mQuestionTextSize);
     }
 
-    public void setAnswerTextSizeInSp(@Dimension int textSizeInSp) {
-        mAnswerTextSizeInSp = textSizeInSp;
-        tvAnswer.setTextSize(TypedValue.COMPLEX_UNIT_SP, mAnswerTextSizeInSp);
+    public void setAnswerTextSize(int unit, float textSize) {
+        mAnswerTextSize = textSize;
+        tvAnswer.setTextSize(unit, mAnswerTextSize);
     }
 
     public void setQuestionTextColor(@ColorRes int colorRes) {

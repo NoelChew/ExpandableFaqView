@@ -15,6 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".NonListExampleActivity" />
+        <activity android:name=".ListViewExampleActivity" />
+        <activity android:name=".RecyclerViewExampleActivity" />
+        <activity android:name=".FaqRecyclerViewExampleActivity" />
     </application>
 
 </manifest>

@@ -20,6 +20,13 @@ public class DummyData {
         faqObjectArrayList.add(new FaqObject("6 Lines", "1\n2\n3\n4\n5\n6"));
         faqObjectArrayList.add(new FaqObject("7 Lines", "1\n2\n3\n4\n5\n6\n7"));
         faqObjectArrayList.add(new FaqObject("8 Lines", "1\n2\n3\n4\n5\n6\n7\n8"));
+        faqObjectArrayList.add(new FaqObject("9 Lines", "1\n2\n3\n4\n5\n6\n7\n8\n9"));
+        faqObjectArrayList.add(new FaqObject("10 Lines", "1\n2\n3\n4\n5\n6\n7\n8\n9\n10"));
+        faqObjectArrayList.add(new FaqObject("11 Lines", "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11"));
+        faqObjectArrayList.add(new FaqObject("12 Lines", "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12"));
+        faqObjectArrayList.add(new FaqObject("13 Lines", "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13"));
+        faqObjectArrayList.add(new FaqObject("14 Lines", "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14"));
+        faqObjectArrayList.add(new FaqObject("15 Lines", "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15"));
 
         return faqObjectArrayList;
     }

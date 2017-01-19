@@ -1,7 +1,8 @@
-package com.noelchew.expandablefaqview;
+package com.noelchew.expandablefaqview.adapter;
 
+import com.noelchew.expandablefaqview.R;
 import com.noelchew.library.model.FaqObject;
-import com.noelchew.library.recyclerview.FaqAdapter;
+import com.noelchew.library.recyclerview.FaqRecyclerViewAdapter;
 import com.noelchew.library.recyclerview.FaqRecyclerViewHolder;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * Created by noelchew on 19/01/2017.
  */
 
-public class CustomFaqAdapter extends FaqAdapter {
+public class CustomFaqAdapter extends FaqRecyclerViewAdapter {
     public CustomFaqAdapter(ArrayList<FaqObject> faqObjectArrayList) {
         super(faqObjectArrayList);
     }
@@ -18,7 +19,7 @@ public class CustomFaqAdapter extends FaqAdapter {
     @Override
     public void onBindViewHolder(FaqRecyclerViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        if (position % 2 == 0) {
+        if (position % 2 != 0) {
             holder.setQuestionBackgroundColor(R.color.white);
             holder.setAnswerBackgroundColor(R.color.white);
         } else {
